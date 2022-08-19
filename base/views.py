@@ -35,7 +35,7 @@ def updateRoom(request, pk):
     form = RoomForm(instance=room)
 
     if request.method == 'POST':
-        form = RoomForm(request.POST, istance=room)
+        form = RoomForm(request.POST, instance=room)
         if form.is_valid():
             form.save()
             return redirect('home')
