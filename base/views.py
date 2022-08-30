@@ -1,5 +1,6 @@
 from email import message
 from multiprocessing import context
+from pydoc_data.topics import topics
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib import messages
@@ -96,7 +97,7 @@ def room(request, pk):
 @login_required(login_url='login')
 def createRoom(request):
     form = RoomForm()
-
+    topics = Topic.objects.all()
     if request.method == 'POST':
        form = RoomForm(request.POST)
        if form.is_valid():
@@ -105,7 +106,7 @@ def createRoom(request):
             room.save()
             return redirect('home')
 
-    context = {'form': form}
+    context = {'form': form, 'topics': topics}
     return render(request, 'base/room_form.html', context)
 
 
@@ -123,7 +124,7 @@ def userProfile(request, pk):
 def updateRoom(request, pk):
     room = Room.objects.get(id=pk)
     form = RoomForm(instance=room)
-
+    topics = Topic.objects.all()
     if request.user != room.host:
         return HttpResponse('You are not allowed here!')
 
@@ -133,7 +134,7 @@ def updateRoom(request, pk):
             form.save()
             return redirect('home')
 
-    context = {'form': form}
+    context = {'form': form, 'topics': topics}
     return render(request, 'base/room_form.html', context)
 
 
